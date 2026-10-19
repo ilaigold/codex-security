@@ -542,7 +542,9 @@ async function securityPolicyPaths(
   // Git storage can reference a directory visited earlier in the walk.
   return {
     paths: [...policies, ...reportingPaths].filter(
-      (path) => !isGitData(path) && !isIgnored(path),
+      (path) =>
+        !isGitData(path) &&
+        (path === join(root, "SECURITY.md") || !isIgnored(path)),
     ),
     gitMetadataPaths: [...gitDirectories],
   };

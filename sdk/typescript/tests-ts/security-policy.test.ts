@@ -402,7 +402,7 @@ describe("security policy generation", () => {
     policyGit(f.repository, "init", "--quiet");
     await writeFile(
       join(f.repository, ".gitignore"),
-      "node_modules/\n.venv/\n",
+      "/SECURITY.md\nnode_modules/\n.venv/\n",
     );
     await writeFile(join(f.repository, "SECURITY.md"), POLICY);
     for (const directory of [
@@ -423,6 +423,15 @@ describe("security policy generation", () => {
       "SECURITY.md",
       "node_modules/tracked/SECURITY.md",
       "services/api/SECURITY.md",
+    ]);
+    const selectedDependency = await inspectSecurityPolicySources(
+      await resolveSecurityPolicyTarget(
+        f.repository,
+        "node_modules/dependency",
+      ),
+    );
+    expect(selectedDependency.policyPaths).toEqual([
+      "node_modules/dependency/SECURITY.md",
     ]);
   });
 
